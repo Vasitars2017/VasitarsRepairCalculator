@@ -1,0 +1,87 @@
+.main-con {
+  min-height: 100vh;
+  min-width: 100vw;
+  background: #8e9eab; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to top,
+    #eef2f3,
+    #8e9eab
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to top,
+    #eef2f3,
+    #8e9eab
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+td,
+th {
+  vertical-align: middle !important;
+}
+th {
+  background: rgb(237, 245, 247);
+}
+td > input {
+  line-height: 20.28px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 5px;
+  padding: 10px 17px;
+}
+
+.nav-p {
+  background-color: black;
+  height: 70px;
+  top: 0;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.tit {
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+}
+
+.sub-head {
+  font-size: 16px;
+  align-self: flex-start;
+}
+
+.line {
+  border-top: 1px solid black;
+}
+
+@media all and (max-width: 825px) {
+  .title {
+    margin-left: 14px;
+  }
+  .india {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2px;
+  }
+  td > input {
+    height: 8px;
+    text-align: left;
+  }
+}
+@media screen and (max-width: 600px) {
+  .butt {
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+  }
+  .leaking {
+    width: 80;
+  }
+}
