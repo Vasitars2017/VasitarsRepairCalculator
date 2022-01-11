@@ -3,6 +3,7 @@ import { Card, CardBody, Alert, Dropdown, Table } from "reactstrap";
 import "./index.css";
 import vasi from "../Assets/vasi.png";
 import vasitars_logo from "../Assets/vasitars_logo.png";
+const internationalNumberFormat = new Intl.NumberFormat('en-US')
 
 const File = () => {
   let arr = [
@@ -20,7 +21,7 @@ const File = () => {
     "Service de-rating factor considering environmental compatibility",
     "External diameter of the pipe substrate",
     "Original wall thickness of the pipe substrate",
-    "Percentage wall loss of the type A defect",
+    "Minimum remaining wall thickness of the pipe substrate",
     "Tensile Modulus of the pipe substrate",
     "Specified Minimum Yield Strength of the pipe substrate",
     "Circumferential Tensile Modulus of the repair laminate",
@@ -31,8 +32,10 @@ const File = () => {
     "Applied axial bending moment",
     "Applied shear load",
     "Applied torsional moment",
+    "Repair thickness increase factor",
     "Design internal pressure",
     "Lapshear strength of the adhesive with the resin system",
+    "Per ply thickness of the repair laminate",
     "Characteristic length of the defect",
   ];
 
@@ -62,9 +65,11 @@ const File = () => {
     "Applied axial bending moment",
     "Applied shear load",
     "Applied torsional moment",
+    "Repair thickness increase factor",
     "Characteristic length of the defect",
     "Design internal pressure",
     "Lapshear strength of the adhesive with the resin system",
+    "Per ply thickness of the repair laminate"
   ];
 
   const [hide1, sethide1] = useState(true);
@@ -101,7 +106,7 @@ const File = () => {
   });
 
   const [slide, setslide] = useState("");
-  const [res, setresult] = useState([{ val1: 0, val2: 0, val3: 0 }]);
+  const [res, setresult] = useState([{ val1: 0, val2: 0, val3: 0,val4:0,val5:0,val6:0,val7:0 }]);
 
   const {
     val1,
@@ -132,11 +137,13 @@ const File = () => {
     val26,
     val27,
     val28,
+    val29,val30,val31
   } = datav;
-
+  const piee=3.14159;
   function solve(a, b, c) {
     var result = (-1 * b + Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / (2 * a);
     var result2 = (-1 * b - Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / (2 * a);
+    if(result>result2)return [result2,result];
     return [result, result2];
   }
 
@@ -192,7 +199,7 @@ const File = () => {
         // D < 0, three roots, but needs to use complex numbers/trigonometric solution
         var u = 2 * Math.sqrt(-p / 3);
         var t = Math.acos((3 * q) / p / u) / 3; // D < 0 implies p < 0 and acos argument in [-1..1]
-        var k = (2 * Math.PI) / 3;
+        var k = (2 * piee) / 3;
         roots = [u * Math.cos(t), u * Math.cos(t - k), u * Math.cos(t - 2 * k)];
       }
     }
@@ -220,62 +227,73 @@ const File = () => {
     let eaT = fT1 * ea0 - Math.abs((val3 - val7) * (val10 - val9) * 10 ** -6);
     let ec = val11 * val12 * ecT;
     let ea = val11 * val12 * eaT;
-    let ts = val14 * ((100 - val15) / 100);
     let Eac = Math.sqrt(val18 * val19);
-    let Ps = (0.72 * (2 * ts * val17)) / val13;
-    let Pcr = (4 / (Math.pi * val13 ** 2)) * (val24 + (2 * val25) / val13);
+    let Ps = (0.72 * (2 * val15 * val17)) / val13;
+    let Pcr = (4 / (piee * val13 ** 2)) * (val24 + (2 * val25) / val13);
     let Peq = 0;
-    if (val26 >= Pcr)
+    if (val27 >= Pcr)
       Peq =
-        val26 *
+        val27 *
         (1 +
-          (16 / (Math.pi ** 2 * val13 ** 4 * val26 ** 2)) *
+          (16 / (piee ** 2 * val13 ** 4 * val27 ** 2)) *
             (val24 + (2 * val25) / val13) ** 2);
     else
       Peq =
-        val26 + (4 / (Math.pi * val13 ** 2)) * (val24 + (2 * val25) / val13);
+        val27 + (4 / (piee * val13 ** 2)) * (val24 + (2 * val25) / val13);
 
     let Feq =
-      (Math.pi * val26 * val13 ** 2) / 4 +
+      (piee * val27 * val13 ** 2) / 4 +
       Math.sqrt(val22 ** 2 + 4 * val24 ** 2) +
       (4 / val13) * Math.sqrt(val23 ** 2 + val25 ** 2);
 
     let Z =
       (Peq * val13) / (2 * val18) +
-      (val20 * Feq) / (Math.pi * val13 * val18) -
+      (val20 * Feq) / (piee * val13 * val18) -
       (Ps * val13) / (2 * val18);
     let Y = (val21 * val13) / 2;
     let A = ec * val18;
-    let B = ec * val18 * ts - Z * val18 + Y;
-    let C = -Z * val18 * ts;
+    let B = ec * val16 * val15 - Z * val18 + Y;
+    let C = -Z * val16 * val15;
     let E = [A, B, C];
     let roots = solve(E[0], E[1], E[2]);
     let tminc = roots[1];
     let tmina =
       (1 / ea) *
-      (Feq / (Math.pi * val13 * val19) - (Peq * val13 * val20) / (2 * val18));
-    let tmin = Math.max(tminc, tmina);
-    let tminr = Math.round(tmin);
-    let N = Math.round(tminr / 0.75);
-    let tdesign = N * 0.75;
+      (Feq / (piee * val13 * val19) - (Peq * val13 * val20) / (2 * val18));
+    let tmin =val26*Math.max(tminc, tmina);
+
+    let N = Math.round(tmin /val29);
+    if(N>1){
+      if((N/Math.round(N))>1)N=(Math.round(N)+1);
+      else
+        N=Math.round(N);
+    }
+    else
+    {
+      if(N>0){
+        N=Math.round(N)+1;
+      }
+      else
+        N=1;
+    }
+    let tdesign = N * val29;
     let lover1 = 2 * Math.sqrt(val13 * val14);
     let lover2 = 0,
       ltaper = 0;
-    if (N > 3) lover2 = (3 * val19 * ea * tdesign) / val27;
-    else lover2 = (3 * val19 * ea * 0.75 * 3) / val27;
+    if (N > 3) lover2 = (3 * val19 * ea * tdesign) / val28;
+    else lover2 = (3 * val19 * ea * 0.75 * 3) / val28;
 
     let lover = Math.max(lover1, lover2);
 
     if (N > 3) ltaper = 5 * tdesign;
-    else ltaper = 5 * 0.75 * 3;
-
-    let L = 2 * lover + val28 + 2 * ltaper;
-    let L1 = Math.round(L);
-    if (N > 3) setresult({ val1: tdesign, val2: N, val3: L1 });
-    else setresult({ val1: 3 * 0.75, val2: 3, val3: L1 });
+    else ltaper = 5 * val29 * 3;
+    let L = 2 * lover + val30 + 2 * ltaper;
+    let L1=Math.round(L);
+    if (N > 3) setresult({ val1: tdesign, val2: N, val3: tminc,val4:tmina,val5: lover,val6:ltaper,val7:L1});
+    else setresult({ val1: 3 * 0.75, val2: 3, val3: tminc,val4:tmina,val5: lover,val6:ltaper,val7:L1 });
     sethide2(true);
+    
   };
-
   const result_1 = (e) => {
     e.preventDefault();
     let ec00 = 0.003061 * 10 ** (-0.0044 * val1);
@@ -294,62 +312,131 @@ const File = () => {
     let ec = val11 * val12 * ecT;
     let ea = val11 * val12 * eaT;
     let Eac = Math.sqrt(val17 * val18);
-    let Pcr = (4 / (Math.pi * val13 ** 2)) * (val24 + (2 * val25) / val13);
+    let Pcr = (4 / (piee * val13 ** 2)) * (val24 + (2 * val25) / val13);
     let Peq = 0;
-    if (val27 >= Pcr)
+    if (val28 >= Pcr)
       Peq =
-        val27 *
+        val28 *
         (1 +
-          (16 / (Math.pi ** 2 * val13 ** 4 * val27 ** 2)) *
+          (16 / (piee ** 2 * val13 ** 4 * val28 ** 2)) *
             (val24 + (2 * val25) / val13) ** 2);
     else
       Peq =
-        val27 + (4 / (Math.pi * val13 ** 2)) * (val24 + (2 * val25) / val13);
+        val28 + (4 / (piee * val13 ** 2)) * (val24 + (2 * val25) / val13);
 
     let Feq =
-      (Math.pi * val27 * val13 ** 2) / 4 +
+      (piee * val28 * val13 ** 2) / 4 +
       Math.sqrt(val22 ** 2 + 4 * val24 ** 2) +
       (4 / val13) * Math.sqrt(val23 ** 2 + val25 ** 2);
 
     let tmina =
       (1 / ea) *
-      (Feq / (Math.pi * val13 * val18) - (Peq * val13 * val19) / (2 * val17));
+      (Feq / (piee * val13 * val18) - (Peq * val13 * val19) / (2 * val17));
+    console.log(Peq,Feq)
     let fleak = 0.666 * 10 ** (-0.01584 * (val1 - 1));
 
-    let a = (1 - val19 ** 2) / Eac;
-    let b = (val27 / (fT2 * fleak)) ** 2;
-    let A = (a * b * val26) / Math.pi - 0.001 * val21;
-    let B = (3 * b * val26 ** 2) / (64 * val20);
-    let C = 0;
-    let E = (3 * a * b * val26 ** 4) / 512;
-    let F = [A, B, C, E];
+    let a1 = (1 - val19 ** 2) / Eac;
+    let b1 = (val28 / (fT2 * fleak)) ** 2;
+    let A1 = (a1 * b1 * val27) / piee - 0.001 * val21;
+    let B1 = (3 * b1 * val27 ** 2) / (64 * val20);
+    let C1 = 0;
+    let D1 = (3 * a1 * b1 * val27 ** 4) / 512;
+    let E1 = [A1, B1, C1, D1];
 
-    let roots = solveCubic(F[0], F[1], F[2], F[3]);
+    let roots = solveCubic(E1[0], E1[1], E1[2], E1[3]);
     let tminc = roots[0];
-    let tmin = Math.max(tminc, tmina);
-    let tminr = Math.round(tmin);
-    let N = Math.round(tminr / 0.75);
-    let tdesign = N * 0.75;
+
+    // let a2 = (1-val19**2)/Eac
+    // let b2 = (P/(fT2*fleak))**2
+    // let c2 = (8 + (5*val19))/(10+(10*val19))
+    // let A2 = (((a2*b2*w*Math.pi)/4)-(0.001*Glcl)) 
+    // let B2 = ((3*b2*c2*w**2)/(16*G))
+    // let C2 = 0
+    // let D2 = (a2*b2*w**4)/24
+    // let E2 = [A2, B2, C2, D2]
+
+    // let roots2 =  solveCubic(E2[0], E2[1], E2[2], E2[3]);
+    // let tminc2 = fth*roots2[0]
+    // let tminc3 = fth*(b2*val13**2)/(8*Eac*Glcl)
+
+    // let tmin = Math.max(tminc2, tminc3);
+
+    // let a3 = (1-val19**2)/Eac
+    // let b3 = (P/(fT2*fleak))**2
+    // let c3 = (Eac+(8*G))/(4*G*11520)
+
+    // let A3 = (((a3*b3*val13*phi*math.pi)/8)-(0.001*Glcl))
+    // let B3 = 0
+    // let C3 = 0
+    // let D3 = ((a3*b3*val13**4*phi**4)/384)+(a3*b3*c3*D**4*phi**6)
+    let tmin = val26 * Math.max(tminc, tmina) 
+
+    let N = tmin / val30;
+
+    if(N>1){
+      if((N/Math.round(N))>1)N=(Math.round(N)+1);
+      else
+        N=Math.round(N);
+    }
+    else
+    {
+      if(N>0){
+        N=Math.round(N)+1;
+      }
+      else
+        N=1;
+    }
+
+    let tdesign = N * val30;
+
     let lover1 = 2 * Math.sqrt(val13 * val14);
     let lover2 = 0,
       ltaper = 0;
-    if (N > 3) lover2 = (3 * val18 * ea * tdesign) / val28;
-    else lover2 = (3 * val18 * ea * 0.75 * 3) / val28;
+    if (N > 3) lover2 = (3 * val18 * ea * tdesign) / val29;
+    else lover2 = (3 * val18 * ea * 0.75 * 3) / val29;
 
     let lover = Math.max(lover1, lover2);
 
     if (N > 3) ltaper = 5 * tdesign;
-    else ltaper = 5 * 0.75 * 3;
+    else ltaper = 5 * val30 * 3;
 
-    let L = 2 * lover + val28 + 2 * ltaper;
+    let L = 2 * lover + val27 + 2 * ltaper;
     let L1 = Math.round(L);
-    if (N > 3) setresult({ val1: tdesign, val2: N, val3: L1 });
-    else setresult({ val1: 3 * 0.75, val2: 3, val3: L1 });
+    if (N > 3) setresult({ val1: tdesign, val2: N, val3: tminc,val4:tmina,val5: lover,val6:ltaper,val7:L1});
+    else setresult({  val1: 3 * 0.75, val2: 3, val3: tminc,val4:tmina,val5: lover,val6:ltaper,val7:L1  });
     sethide2(true);
   };
 
+  function isNum(c) {
+    return c >= '0' && c <= '9';
+  }
+  
+  const gop=(val)=>{
+    for(let i of val)
+    {
+      if(i==='.')return 1;
+    }
+    return 0;
+  }
+
+  const solved=(val)=>{
+    if(val==='' ||!isNum(val[val.length-1]) ){
+      return val;
+  }
+  // let y=-1;let s=val.toString();
+  // for(let i=0;i<val.toString().length;i++)
+  // {
+  //     if(s[i]==='.')y++;
+  //     if(y===0 && )
+  // }
+  if(gop(val) && val[val.length-1]==='0')return (val.replace(/\,/g,''));
+  let tmp  = parseFloat(val.replace(/\,/g,''))
+  return tmp;
+  }
+
+
   const handlechage = (e) => {
-    console.log(e.target.value);
+
     if (e.target.value === "Non - Leaking" || e.target.value === "Leaking")
       sethide1(false);
     else sethide1(true);
@@ -358,6 +445,47 @@ const File = () => {
     else {
       setslide("");
       sethide2(false);
+    }
+    setdatav({
+      val1: 0,
+      val2: 0,
+      val3: 0,
+      val4: 0,
+      val5: 0,
+      val6: 0,
+      val7: 0,
+      val8: 0,
+      val9: 0,
+      val10: 0,
+      val11: 0,
+      val12: 0,
+      val13: 0,
+      val14: 0,
+      val15: 0,
+      val16: 0,
+      val17: 0,
+      val18: 0,
+      val19: 0,
+      val20: 0,
+      val21: 0,
+      val22: 0,
+      val23: 0,
+      val24: 0,
+      val25: 0,
+      val26: 0,
+      val27: 0,
+      val28: 0,
+      val29:0,val30:0,
+      val31:0
+    })
+    sethide2(false);
+    for(let i=0;i<30;i++)
+    {
+      let data="val"+(i+1);
+      const doc=document.getElementById(data);
+      doc.value='';
+      // doc.setAttribute("value",'');
+      console.log(document.getElementById(data).value);
     }
   };
   return (
@@ -389,7 +517,7 @@ const File = () => {
           <CardBody style={{ width: "100%" }} className="p-3">
             <form
               onSubmit={(e) => {
-                res === "Non - Leaking" ? result(e) : result_1(e);
+                slide === "Non - Leaking" ? result(e) : result_1(e);
               }}
             >
               <div className="container">
@@ -417,11 +545,12 @@ const File = () => {
                       <div className="line"></div>
                       <Table responsive className="align-middle ">
                         <tbody style={{ zIndex: "-5", overflowY: "hidden" }}>
-                          {(slide === "Non - Leaking" ? arr : arr1).map(
+                          {(slide === "Non - Leaking" ? (arr.map(
                             (val, index) => {
                               const data = "val" + (index + 1);
                               return (
                                 <tr key={index} className="india">
+                                
                                   <td
                                     style={{
                                       textAlign: "start",
@@ -432,17 +561,20 @@ const File = () => {
                                   </td>
                                   <td>
                                     <input
+                                    id={data}
                                       style={{
                                         width: "100%",
                                         textAlign: "center",
                                         border: "1px solid #C4C4C4",
                                       }}
-                                      type="number"
+                                   
+                                      type="text"
                                       required
+                                      
                                       onChange={(e) =>
                                         setdatav({
                                           ...datav,
-                                          [data]: parseInt(e.target.value),
+                                          [data]:solved(e.target.value),
                                         })
                                       }
                                     />
@@ -450,7 +582,43 @@ const File = () => {
                                 </tr>
                               );
                             }
-                          )}
+                          )):(arr1.map(
+                            (val, index) => {
+                              const data = "val" + (index + 1);
+                              return (
+                                <tr key={index} className="india">
+                                   
+                                  <td
+                                    style={{
+                                      textAlign: "start",
+                                      whiteSpace: "pre-line",
+                                    }}
+                                  >
+                                    {val}
+                                  </td>
+                                  <td>
+                                    <input
+                                    id={data}
+                                      style={{
+                                        width: "100%",
+                                        textAlign: "center",
+                                        border: "1px solid #C4C4C4",
+                                      }}
+                                      type="text"
+                                      required
+                                      
+                                      onChange={(e) =>
+                                        setdatav({
+                                          ...datav,
+                                          [data]:solved(e.target.value),
+                                        })
+                                      }
+                                    />
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          ))}
                         </tbody>
                       </Table>
                     </div>
@@ -475,7 +643,7 @@ const File = () => {
                           <tbody style={{ zIndex: "-5", overflowY: "hidden" }}>
                             <tr key={1}>
                               <td style={{ textAlign: "start" }}>
-                                The minimum thickness of the repair laminate
+                              The design thickness of the repair laminate
                               </td>
                               <td>
                                 <input
@@ -486,7 +654,7 @@ const File = () => {
                                     textAlign: "center",
                                     border: "1px solid #C4C4C4",
                                   }}
-                                  type="number"
+                                  type="text"
                                 />
                               </td>
                             </tr>
@@ -503,13 +671,13 @@ const File = () => {
                                     textAlign: "center",
                                     border: "1px solid #C4C4C4",
                                   }}
-                                  type="number"
+                                  type="text"
                                 />
                               </td>
                             </tr>
                             <tr key={3}>
                               <td style={{ textAlign: "start" }}>
-                                The total axial repair length
+                              The minimum repair laminate thickness in circumferential direction is
                               </td>
                               <td>
                                 <input
@@ -520,7 +688,75 @@ const File = () => {
                                     textAlign: "center",
                                     border: "1px solid #C4C4C4",
                                   }}
-                                  type="number"
+                                  type="text"
+                                />
+                              </td>
+                            </tr>
+                            <tr key={4}>
+                              <td style={{ textAlign: "start" }}>
+                              The minimum repair laminate thickness in axial direction is
+                              </td>
+                              <td>
+                                <input
+                                  disabled
+                                  value={res.val4}
+                                  style={{
+                                    width: "100%",
+                                    textAlign: "center",
+                                    border: "1px solid #C4C4C4",
+                                  }}
+                                  type="text"
+                                />
+                              </td>
+                            </tr>
+                            <tr key={5}>
+                              <td style={{ textAlign: "start" }}>
+                              The axial extent of repair
+                              </td>
+                              <td>
+                                <input
+                                  disabled
+                                  value={res.val5}
+                                  style={{
+                                    width: "100%",
+                                    textAlign: "center",
+                                    border: "1px solid #C4C4C4",
+                                  }}
+                                  type="text"
+                                />
+                              </td>
+                            </tr>
+                            <tr key={6}>
+                              <td style={{ textAlign: "start" }}>
+                              The minimum taper length of repair
+                              </td>
+                              <td>
+                                <input
+                                  disabled
+                                  value={res.val6}
+                                  style={{
+                                    width: "100%",
+                                    textAlign: "center",
+                                    border: "1px solid #C4C4C4",
+                                  }}
+                                  type="text"
+                                />
+                              </td>
+                            </tr>
+                            <tr key={7}>
+                              <td style={{ textAlign: "start" }}>
+                              The total axial repair length
+                              </td>
+                              <td>
+                                <input
+                                  disabled
+                                  value={res.val7}
+                                  style={{
+                                    width: "100%",
+                                    textAlign: "center",
+                                    border: "1px solid #C4C4C4",
+                                  }}
+                                  type="text"
                                 />
                               </td>
                             </tr>
