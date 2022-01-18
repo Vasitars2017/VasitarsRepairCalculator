@@ -262,7 +262,7 @@ const File = () => {
       (Feq / (piee * val13 * val19) - (Peq * val13 * val20) / (2 * val18));
     let tmin =val26*Math.max(tminc, tmina);
 
-    let N = Math.round(tmin /val29);
+    let N = tmin /val29;
     if(N>1){
       if((N/Math.round(N))>1)N=(Math.round(N)+1);
       else
