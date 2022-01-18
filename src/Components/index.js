@@ -262,20 +262,8 @@ const File = () => {
       (Feq / (piee * val13 * val19) - (Peq * val13 * val20) / (2 * val18));
     let tmin =val26*Math.max(tminc, tmina);
 
-    let N = tmin /val29;
-    if(N>1){
-      if((N/Math.round(N))>1)N=(Math.round(N)+1);
-      else
-        N=Math.round(N);
-    }
-    else
-    {
-      if(N>0){
-        N=Math.round(N)+1;
-      }
-      else
-        N=1;
-    }
+    let N = Math.ceil(tmin /val29);
+    
     let tdesign = N * val29;
     let lover1 = 2 * Math.sqrt(val13 * val14);
     let lover2 = 0,
