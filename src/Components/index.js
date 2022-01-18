@@ -359,21 +359,7 @@ const File = () => {
     // let D3 = ((a3*b3*val13**4*phi**4)/384)+(a3*b3*c3*D**4*phi**6)
     let tmin = val26 * Math.max(tminc, tmina) 
 
-    let N = tmin / val30;
-
-    if(N>1){
-      if((N/Math.round(N))>1)N=(Math.round(N)+1);
-      else
-        N=Math.round(N);
-    }
-    else
-    {
-      if(N>0){
-        N=Math.round(N)+1;
-      }
-      else
-        N=1;
-    }
+    let N = Math.ceil(tmin / val30);
 
     let tdesign = N * val30;
 
