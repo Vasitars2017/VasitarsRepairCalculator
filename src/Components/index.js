@@ -137,7 +137,7 @@ const File = () => {
     val26,
     val27,
     val28,
-    val29,val30,val31
+    val29,val30
   } = datav;
   const piee=3.14159;
   function solve(a, b, c) {
@@ -449,8 +449,7 @@ const File = () => {
       val26: 0,
       val27: 0,
       val28: 0,
-      val29:0,val30:0,
-      val31:0
+      val29:0,val30:0
     })
     sethide2(false);
     for(let i=0;i<30;i++)
