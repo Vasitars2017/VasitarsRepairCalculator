@@ -40,7 +40,7 @@ const File = () => {
   ];
 
   let arr1 = [
-    "Repair design lifetime",
+    "Repair lifetime",
     "Glass transition temperature",
     "Design temperature of repair",
     "Qualification test temperature",
@@ -411,10 +411,10 @@ const File = () => {
 
   const handlechage = (e) => {
 
-    if (e.target.value === "Non1234 - Leaking" || e.target.value === "Leaking")
+    if (e.target.value === "Non - Leaking" || e.target.value === "Leaking")
       sethide1(false);
     else sethide1(true);
-    if (e.target.value === "Non1234 - Leaking") setslide("Non - Leaking");
+    if (e.target.value === "Non - Leaking") setslide("Non - Leaking");
     else if (e.target.value === "Leaking") setslide("Leaking");
     else {
       setslide("");
