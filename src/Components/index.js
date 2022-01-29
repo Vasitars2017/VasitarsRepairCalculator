@@ -40,7 +40,7 @@ const File = () => {
   ];
 
   let arr1 = [
-    "Repair lifetime",
+    "Repair design lifetime",
     "Glass transition temperature",
     "Design temperature of repair",
     "Qualification test temperature",
