@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/VasitarsRepairCalculator/static/css/main.c820fc91.css",
-    "main.js": "/VasitarsRepairCalculator/static/js/main.46630c5f.js",
+    "main.js": "/VasitarsRepairCalculator/static/js/main.49451ba2.js",
     "static/js/787.c3a0d58d.chunk.js": "/VasitarsRepairCalculator/static/js/787.c3a0d58d.chunk.js",
     "static/media/vasi.png": "/VasitarsRepairCalculator/static/media/vasi.0404788f7aa71e24ad93.png",
     "static/media/vasitars_logo.png": "/VasitarsRepairCalculator/static/media/vasitars_logo.b12a3cd4070d9794a198.png",
     "index.html": "/VasitarsRepairCalculator/index.html",
     "main.c820fc91.css.map": "/VasitarsRepairCalculator/static/css/main.c820fc91.css.map",
-    "main.46630c5f.js.map": "/VasitarsRepairCalculator/static/js/main.46630c5f.js.map",
+    "main.49451ba2.js.map": "/VasitarsRepairCalculator/static/js/main.49451ba2.js.map",
     "787.c3a0d58d.chunk.js.map": "/VasitarsRepairCalculator/static/js/787.c3a0d58d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c820fc91.css",
-    "static/js/main.46630c5f.js"
+    "static/js/main.49451ba2.js"
   ]
 }
