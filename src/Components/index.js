@@ -8,7 +8,7 @@ const internationalNumberFormat = new Intl.NumberFormat('en-US')
 const File = () => {
   let arr = [
     "Repair design lifetime",
-    "Glass transition temperature",
+    "Glass transition temperature 1",
     "Design temperature of repair",
     "Qualification test temperature",
     "Ambient test temperature",
@@ -41,7 +41,7 @@ const File = () => {
 
   let arr1 = [
     "Repair design lifetime",
-    "Glass transition temperature",
+    "Glass transition temperature 1",
     "Design temperature of repair",
     "Qualification test temperature",
     "Ambient test temperature",
